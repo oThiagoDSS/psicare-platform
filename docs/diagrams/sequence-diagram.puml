@@ -1,0 +1,49 @@
+@startuml
+autonumber
+skinparam boxPadding 10
+
+actor "Psychologist" as User
+box "PsiCare Ecosystem" #AliceBlue
+    boundary "Web Browser\n(Frontend)" as UI
+    control "API Gateway\n(Controller Router)" as Gateway
+    control "Appointment\nService" as Svc
+    database "MySQL Relational\nDatabase" as DB
+end box
+
+User -> UI : Fill session form & click "Schedule"
+activate UI
+
+UI -> Gateway : POST /api/appointments (JSON Payload)
+activate Gateway
+
+Gateway -> Svc : processBooking(appointmentData)
+activate Svc
+
+Svc -> DB : SELECT * FROM appointments WHERE date = ? AND time = ?
+activate DB
+DB --> Svc : return overlapping appointments
+deactivate DB
+
+note over Svc : validateConflict() algorithm\nChecks for scheduling overlaps
+
+alt No Conflict Detected
+    Svc -> DB : INSERT INTO appointments VALUES (...)
+    activate DB
+    DB --> Svc : confirm transaction persistence
+    deactivate DB
+    
+    Svc -> DB : INITIALIZE empty ClinicalRecord & Billing entries
+    
+    Svc --> Gateway : return Booking Success Response
+    Gateway --> UI : HTTP 201 Created Status
+    UI --> User : Display "Session successfully scheduled" alert
+else Scheduling Conflict Intercepted
+    Svc --> Gateway : throw SchedulingConflictException
+    Gateway --> UI : HTTP 409 Conflict Status
+    UI --> User : Display "Time slot unavailable" error message
+end
+
+deactivate Svc
+deactivate Gateway
+deactivate UI
+@endum

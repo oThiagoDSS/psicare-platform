@@ -1,0 +1,64 @@
+@startuml
+page 1x1
+skinparam componentStyle uml2
+
+package "Frontend Web Client (Bootstrap / JS)" {
+    [Auth Component] as UI_Auth
+    [Scheduling Module] as UI_Schedule
+    [EHR Text Editor] as UI_EHR
+    [Financial Panel] as UI_Finance
+}
+
+package "Backend REST API (Java Spring / PHP)" {
+    interface "HTTP REST Endpoints" as API_Gateway
+    
+    folder "Controllers / Routers" {
+        [AuthController] as Ctrl_Auth
+        [AppointmentController] as Ctrl_Appoint
+        [PatientController] as Ctrl_Patient
+        [ClinicalRecordController] as Ctrl_EHR
+        [FinanceController] as Ctrl_Finance
+    }
+    
+    folder "Business Logic Services" {
+        [SecurityService] as Svc_Auth
+        [SchedulingEngine] as Svc_Schedule
+        [EHRManager] as Svc_EHR
+        [BillingProcessor] as Svc_Finance
+    }
+}
+
+database "Data Layer (MySQL)" {
+    [Users / Identity Ledger] as DB_Users
+    [Appointments Registry] as DB_Appoints
+    [Secure Clinical Records] as DB_Records
+    [Financial Cash Flow] as DB_Finance
+}
+
+' Client to API Connections
+UI_Auth --> API_Gateway
+UI_Schedule --> API_Gateway
+UI_EHR --> API_Gateway
+UI_Finance --> API_Gateway
+
+' Gateway Routing
+API_Gateway - Ctrl_Auth
+API_Gateway - Ctrl_Appoint
+API_Gateway - Ctrl_Patient
+API_Gateway - Ctrl_EHR
+API_Gateway - Ctrl_Finance
+
+' Controllers to Services
+Ctrl_Auth --> Svc_Auth
+Ctrl_Appoint --> Svc_Schedule
+Ctrl_Patient --> Svc_Schedule
+Ctrl_EHR --> Svc_EHR
+Ctrl_Finance --> Svc_Finance
+
+' Services to Database Persistence
+Svc_Auth --> DB_Users
+Svc_Schedule --> DB_Appoints
+Svc_EHR --> DB_Records
+Svc_Finance --> DB_Finance
+
+@endum

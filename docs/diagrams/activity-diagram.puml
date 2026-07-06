@@ -1,0 +1,24 @@
+@startuml
+start
+:User initiates session booking request;
+:Input required fields\n(Patient, Date, Time, Modality);
+
+if (Are all mandatory fields filled?) then (yes)
+    :Execute system validateConflict() algorithm;
+    
+    if (Does another appointment overlap for this psychologist?) then (yes)
+        :Trigger scheduling conflict interceptor;
+        :Display "Time slot unavailable" error message;
+        stop
+    else (no)
+        :Persist Appointment transaction in MySQL;
+        :Generate empty Clinical Record (EHR) placeholder;
+        :Initialize billing ledger entry (Pending status);
+        :Display "Session successfully scheduled" success alert;
+        stop
+    endif
+else (no)
+    :Display "Missing required information" alert;
+    stop
+endif
+@endum

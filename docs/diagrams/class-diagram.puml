@@ -1,0 +1,63 @@
+@startuml
+abstract class User {
+    - int id
+    - String name
+    - String email
+    - String password
+    + login()
+    + logout()
+}
+
+class Psychologist {
+    - String crp (Professional License)
+    - String specialization
+    + managePatient()
+    + registerSession()
+    + generateReport()
+}
+
+class Patient {
+    - String cpf
+    - Date birthDate
+    - String phone
+    - boolean isActive
+    + viewSchedule()
+}
+
+class Appointment {
+    - int id
+    - DateTime dateTime
+    - String status
+    - String modality (Online/In-person)
+    + validateConflict()
+    + cancel()
+}
+
+class ClinicalRecord {
+    - int id
+    - Date date
+    - String description
+    - boolean isLocked
+    + saveRecord()
+    + appendAddendum()
+}
+
+class Transaction {
+    - int id
+    - double value
+    - Date paymentDate
+    - String paymentMethod (PIX/Card)
+    - String status
+    + generatePDFInvoice()
+}
+
+User <|-- Psychologist
+User <|-- Patient
+
+Psychologist "1" -- "*" Patient : treats >
+Psychologist "1" -- "*" Appointment : manages >
+Patient "1" -- "*" Appointment : schedules >
+Appointment "1" -- "1" ClinicalRecord : generates >
+Appointment "1" -- "0..1" Transaction : billing >
+
+@endum

@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Psychologist" as psych
+actor "Patient" as patient
+
+rectangle "PsiCare System" {
+    usecase "Authenticate User\n(Login/Logout)" as UC_Auth
+    usecase "Manage Patient Records\n(CRUD/Inactivation)" as UC_Patient
+    usecase "Manage Schedule\n(Book/Reschedule)" as UC_Schedule
+    usecase "Record Clinical Progress\n(Immutable EHR)" as UC_EHR
+    usecase "Manage Financial Records\n(Invoices/Cash Flow)" as UC_Finance
+    usecase "Generate Analytics Reports" as UC_Reports
+    usecase "View Personal Schedule\n& Financial History" as UC_PatientView
+}
+
+psych --> UC_Auth
+psych --> UC_Patient
+psych --> UC_Schedule
+psych --> UC_EHR
+psych --> UC_Finance
+psych --> UC_Reports
+
+patient --> UC_Auth
+patient --> UC_PatientView
+
+@endum

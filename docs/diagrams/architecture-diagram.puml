@@ -1,0 +1,36 @@
+@startuml
+skinparam componentStyle uml2
+
+package "Presentation Layer (Frontend)" {
+    [Web Browser Interface] as browser
+    note right of browser : HTML5 / CSS3\nJavaScript / Bootstrap
+}
+
+package "Business Logic Layer (Backend REST API)" {
+    [API Gateway / Controller Router] as gateway
+    
+    package "Core Domain Services" {
+        [Patient Management Service] as patientSvc
+        [Appointment & Scheduling Service] as appointSvc
+        [EHR / Clinical Record Service] as ehrSvc
+        [Finance & Billing Service] as financeSvc
+    }
+}
+
+package "Data Layer" {
+    database "MySQL Relational Database" as db
+}
+
+' Interactions
+browser --> gateway : Secure HTTP REST Requests (JSON)
+gateway --> patientSvc
+gateway --> appointSvc
+gateway --> ehrSvc
+gateway --> financeSvc
+
+patientSvc --> db : JDBC / SQL Entity Mapping
+appointSvc --> db : JDBC / SQL Entity Mapping
+ehrSvc --> db : JDBC / SQL Entity Mapping
+financeSvc --> db : JDBC / SQL Entity Mapping
+
+@endum

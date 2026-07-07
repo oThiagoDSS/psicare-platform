@@ -37,7 +37,7 @@ The interactive client interface is built using a modern, scalable frontend stac
 
 # 📂 Repository File Structure
 
-```text
+```
 psicare-platform/
 ├── assets/                          # Rendered system diagrams (PNG)
 │   ├── activity-diagram.png
@@ -74,7 +74,7 @@ psicare-platform/
     ├── postcss.config.mjs           # CSS post-processing configuration
     └── vite.config.ts               # Vite engine structural rules
 
-```markdown
+```
 ## PsiCare — Clinical & Administrative Management Platform
 
 An end-to-end frontend web application designed to streamline and professionalize independent psychological practices. PsiCare addresses operational fragmentation by unifying patient management, scheduling, secure electronic health records (EHR) concepts, and financial workflows into a polished, modern user interface.
